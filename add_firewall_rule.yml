@@ -1,0 +1,24 @@
+---
+- name: Add firewall rule in Azure
+  hosts: localhost
+  connection: local
+  vars_files:
+    - azure_credentials.yml
+  tasks:
+    - name: Add a rule to an existing network security group
+      azure_rm_securityrule:
+        resource_group: "{{ resource_group }}"
+        security_group_name: "{{ security_group_name }}"
+        name: "{{ rule_name }}"
+        protocol: "{{ protocol }}"
+        direction: "{{ direction }}"
+        priority: "{{ priority }}"
+        access: "{{ access }}"
+        source_port_range: "{{ source_port_range }}"
+        destination_port_range: "{{ destination_port_range }}"
+        source_address_prefix: "{{ source_address_prefix }}"
+        destination_address_prefix: "{{ destination_address_prefix }}"
+      register: output
+
+    - debug:
+        var: output
