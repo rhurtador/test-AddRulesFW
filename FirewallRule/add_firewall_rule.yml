@@ -20,7 +20,7 @@
 
 
    - name: "Add a rule to an existing network security group"
-      azure_rm_securityrule:
+     azure_rm_securityrule:
         resource_group: "{{ resource_group }}"
         security_group_name: "{{ security_group_name }}"
         name: "{{ rule_name }}"
