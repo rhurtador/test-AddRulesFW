@@ -5,7 +5,7 @@
   vars_files:
     - azure_credentials.yml
   tasks:
-  - name: Debug Print variables
+  - name: "Debug Print variables"
     debug:
       msg:
         - "Resource Group: {{ resource_group }}"
