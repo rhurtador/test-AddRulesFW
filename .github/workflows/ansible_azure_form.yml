@@ -13,7 +13,7 @@ on:
         description: 'Firewall Rule Name'
         required: true
       protocol:
-        description: 'Protocol (Tcp/Upd/Any)'
+        description: 'Protocol (Tcp/Udp/Any)'
         required: true
         default: 'Tcp'
       direction:
@@ -70,7 +70,7 @@ jobs:
         echo "subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> ~/.azure/credentials
         echo "client_id=${{ secrets.AZURE_CLIENT_ID }}" >> ~/.azure/credentials
         echo "secret=${{ secrets.AZURE_SECRET }}" >> ~/.azure/credentials
-        echo "tenant=${{ secrets.AZURE_TENANT }}" >> ~/.azure/credentials
+        echo "tenant=${{ secrets.AZURE_TENANT }}" >> ~/..azure/credentials
 
     - name: Run Ansible Playbook
       run: ansible-playbook add_firewall_rule.yml --extra-vars "resource_group=${{ github.event.inputs.resource_group }} security_group_name=${{ github.event.inputs.security_group_name }} rule_name=${{ github.event.inputs.rule_name }} protocol=${{ github.event.inputs.protocol }} direction=${{ github.event.inputs.direction }} priority=${{ github.event.inputs.priority }} access=${{ github.event.inputs.access }} source_port_range=${{ github.event.inputs.source_port_range }} destination_port_range=${{ github.event.inputs.destination_port_range }} source_address_prefix=${{ github.event.inputs.source_address_prefix }} destination_address_prefix=${{ github.event.inputs.destination_address_prefix }}"
