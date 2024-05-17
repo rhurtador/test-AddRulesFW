@@ -3,6 +3,14 @@ name: Add Azure Firewall Rule
 on:
   workflow_dispatch:
     inputs:
+      branch:
+        description: 'Select the branch to run the workflow on'
+        required: true
+        type: choice
+        options:
+          - 'main'
+          - 'develop'
+          - 'feature/xyz'
       resource_group:
         description: 'Azure Resource Group'
         required: true
@@ -13,21 +21,31 @@ on:
         description: 'Firewall Rule Name'
         required: true
       protocol:
-        description: 'Protocol (Tcp/Udp/Any)'
+        description: 'Protocol'
         required: true
-        default: 'Tcp'
+        type: choice
+        options:
+          - 'Tcp'
+          - 'Udp'
+          - 'Any'
       direction:
-        description: 'Direction (Inbound/Outbound)'
+        description: 'Direction'
         required: true
-        default: 'Inbound'
+        type: choice
+        options:
+          - 'Inbound'
+          - 'Outbound'
+      access:
+        description: 'Access'
+        required: true
+        type: choice
+        options:
+          - 'Allow'
+          - 'Deny'
       priority:
         description: 'Priority'
         required: true
         default: '100'
-      access:
-        description: 'Access (Allow/Deny)'
-        required: true
-        default: 'Allow'
       source_port_range:
         description: 'Source Port Range'
         required: true
@@ -52,6 +70,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.inputs.branch }}
 
     - name: Set up Python
       uses: actions/setup-python@v2
@@ -70,7 +90,7 @@ jobs:
         echo "subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> ~/.azure/credentials
         echo "client_id=${{ secrets.AZURE_CLIENT_ID }}" >> ~/.azure/credentials
         echo "secret=${{ secrets.AZURE_SECRET }}" >> ~/.azure/credentials
-        echo "tenant=${{ secrets.AZURE_TENANT }}" >> ~/..azure/credentials
+        echo "tenant=${{ secrets.AZURE_TENANT }}" >> ~/.azure/credentials
 
     - name: Run Ansible Playbook
       run: ansible-playbook add_firewall_rule.yml --extra-vars "resource_group=${{ github.event.inputs.resource_group }} security_group_name=${{ github.event.inputs.security_group_name }} rule_name=${{ github.event.inputs.rule_name }} protocol=${{ github.event.inputs.protocol }} direction=${{ github.event.inputs.direction }} priority=${{ github.event.inputs.priority }} access=${{ github.event.inputs.access }} source_port_range=${{ github.event.inputs.source_port_range }} destination_port_range=${{ github.event.inputs.destination_port_range }} source_address_prefix=${{ github.event.inputs.source_address_prefix }} destination_address_prefix=${{ github.event.inputs.destination_address_prefix }}"
@@ -79,3 +99,4 @@ jobs:
         AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
         AZURE_SECRET: ${{ secrets.AZURE_SECRET }}
         AZURE_TENANT: ${{ secrets.AZURE_TENANT }}
+        
