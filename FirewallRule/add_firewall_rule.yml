@@ -30,7 +30,7 @@
         access: "{{ access }}"
         port_range: "{{ port_range }}"
         address_prefix: "{{ address_prefix }}"
-      register: output
+     register: output
 
    - debug:
-      var: output
+     var: output
