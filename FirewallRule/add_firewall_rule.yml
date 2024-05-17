@@ -5,18 +5,19 @@
   vars_files:
     - azure_credentials.yml
   tasks:
-    - name: Debug: Print variables
-      debug:
-        msg:
-          - "Resource Group: {{ resource_group }}"
-          - "Security Group Name: {{ security_group_name }}"
-          - "Rule Name: {{ rule_name }}"
-          - "Protocol: {{ protocol }}"
-          - "Direction: {{ direction }}"
-          - "Priority: {{ priority }}"
-          - "Access: {{ access }}"
-          - "port range: {{ port_range }}"
-          - "Address Prefix: {{ address_prefix }}"
+  - name: Debug Print variables
+    debug:
+      msg:
+        - "Resource Group: {{ resource_group }}"
+        - "Security Group Name: {{ security_group_name }}"
+        - "Rule Name: {{ rule_name }}"
+        - "Protocol: {{ protocol }}"
+        - "Direction: {{ direction }}"
+        - "Priority: {{ priority }}"
+        - "Access: {{ access }}"
+        - "Port Range: {{ port_range }}"
+        - "Address Prefix: {{ address_prefix }}"
+
 
     - name: Add a rule to an existing network security group
       azure_rm_securityrule:
