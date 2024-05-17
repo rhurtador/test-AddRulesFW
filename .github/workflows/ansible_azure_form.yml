@@ -1,0 +1,81 @@
+name: Add Azure Firewall Rule
+
+on:
+  workflow_dispatch:
+    inputs:
+      resource_group:
+        description: 'Azure Resource Group'
+        required: true
+      security_group_name:
+        description: 'Network Security Group Name'
+        required: true
+      rule_name:
+        description: 'Firewall Rule Name'
+        required: true
+      protocol:
+        description: 'Protocol (Tcp/Udp/Any)'
+        required: true
+        default: 'Tcp'
+      direction:
+        description: 'Direction (Inbound/Outbound)'
+        required: true
+        default: 'Inbound'
+      priority:
+        description: 'Priority'
+        required: true
+        default: '100'
+      access:
+        description: 'Access (Allow/Deny)'
+        required: true
+        default: 'Allow'
+      source_port_range:
+        description: 'Source Port Range'
+        required: true
+        default: '*'
+      destination_port_range:
+        description: 'Destination Port Range'
+        required: true
+        default: '80'
+      source_address_prefix:
+        description: 'Source Address Prefix'
+        required: true
+        default: '*'
+      destination_address_prefix:
+        description: 'Destination Address Prefix'
+        required: true
+        default: '*'
+
+jobs:
+  add-firewall-rule:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install Ansible and Azure dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install ansible[azure]
+
+    - name: Configure Azure credentials
+      run: |
+        mkdir -p ~/.azure
+        echo "[default]" > ~/.azure/credentials
+        echo "subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> ~/.azure/credentials
+        echo "client_id=${{ secrets.AZURE_CLIENT_ID }}" >> ~/.azure/credentials
+        echo "secret=${{ secrets.AZURE_SECRET }}" >> ~/.azure/credentials
+        echo "tenant=${{ secrets.AZURE_TENANT }}" >> ~/..azure/credentials
+
+    - name: Run Ansible Playbook
+      run: ansible-playbook add_firewall_rule.yml --extra-vars "resource_group=${{ github.event.inputs.resource_group }} security_group_name=${{ github.event.inputs.security_group_name }} rule_name=${{ github.event.inputs.rule_name }} protocol=${{ github.event.inputs.protocol }} direction=${{ github.event.inputs.direction }} priority=${{ github.event.inputs.priority }} access=${{ github.event.inputs.access }} source_port_range=${{ github.event.inputs.source_port_range }} destination_port_range=${{ github.event.inputs.destination_port_range }} source_address_prefix=${{ github.event.inputs.source_address_prefix }} destination_address_prefix=${{ github.event.inputs.destination_address_prefix }}"
+      env:
+        AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+        AZURE_SECRET: ${{ secrets.AZURE_SECRET }}
+        AZURE_TENANT: ${{ secrets.AZURE_TENANT }}
