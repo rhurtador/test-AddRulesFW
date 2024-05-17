@@ -5,23 +5,22 @@
   vars_files:
     - azure_credentials.yml
   tasks:
-    - name: Debug: Print variables
-      debug:
-        msg:
-          - "Resource Group: {{ resource_group }}"
-          - "Security Group Name: {{ security_group_name }}"
-          - "Rule Name: {{ rule_name }}"
-          - "Protocol: {{ protocol }}"
-          - "Direction: {{ direction }}"
-          - "Priority: {{ priority }}"
-          - "Access: {{ access }}"
-          - "Source Port Range: {{ source_port_range }}"
-          - "Destination Port Range: {{ destination_port_range }}"
-          - "Source Address Prefix: {{ source_address_prefix }}"
-          - "Destination Address Prefix: {{ destination_address_prefix }}"
+  - name: "Debug Print variables"
+    debug:
+      msg:
+        - "Resource Group: {{ resource_group }}"
+        - "Security Group Name: {{ security_group_name }}"
+        - "Rule Name: {{ rule_name }}"
+        - "Protocol: {{ protocol }}"
+        - "Direction: {{ direction }}"
+        - "Priority: {{ priority }}"
+        - "Access: {{ access }}"
+        - "Port Range: {{ port_range }}"
+        - "Address Prefix: {{ address_prefix }}"
 
-    - name: Add a rule to an existing network security group
-      azure_rm_securityrule:
+
+  - name: "Add a rule to an existing network security group"
+    azure_rm_securityrule:
         resource_group: "{{ resource_group }}"
         security_group_name: "{{ security_group_name }}"
         name: "{{ rule_name }}"
@@ -29,11 +28,10 @@
         direction: "{{ direction }}"
         priority: "{{ priority }}"
         access: "{{ access }}"
-        source_port_range: "{{ source_port_range }}"
-        destination_port_range: "{{ destination_port_range }}"
-        source_address_prefix: "{{ source_address_prefix }}"
-        destination_address_prefix: "{{ destination_address_prefix }}"
-      register: output
+        port_range: "{{ port_range }}"
+        address_prefix: "{{ address_prefix }}"
+    register: output
 
-    - debug:
-        var: output
+
+- debug:
+       var: output
