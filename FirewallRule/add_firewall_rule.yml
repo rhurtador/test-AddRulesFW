@@ -19,18 +19,32 @@
         - "Address Prefix: {{ address_prefix }}"
 
 
-   - name: "Add a rule to an existing network security group"
-     azure_rm_securityrule:
-        resource_group: "{{ resource_group }}"
-        security_group_name: "{{ security_group_name }}"
-        name: "{{ rule_name }}"
-        protocol: "{{ protocol }}"
-        direction: "{{ direction }}"
-        priority: "{{ priority }}"
-        access: "{{ access }}"
-        port_range: "{{ port_range }}"
-        address_prefix: "{{ address_prefix }}"
-     register: output
+#   - name: "Add a rule to an existing network security group"
+     #azure_rm_securityrule:
+        #resource_group: "{{ resource_group }}"
+        #security_group_name: "{{ security_group_name }}"
+        #name: "{{ rule_name }}"
+        #protocol: "{{ protocol }}"
+       # direction: "{{ direction }}"
+      #  priority: "{{ priority }}"
+     #   access: "{{ access }}"
+    #    port_range: "{{ port_range }}"
+   #     address_prefix: "{{ address_prefix }}"
+  #   register: output
 
-   - debug:
-     var: output
+     - name: "Add a rule to an existing network security group"
+       azure_rm_securityrule:
+          resource_group: "{{ resource_group }}"
+          security_group_name: "{{ security_group_name }}"
+          name: "{{ rule_name }}"
+          protocol: "{{ protocol }}"
+          direction: "{{ direction }}"
+          priority: "{{ priority }}"
+          access: "{{ access }}"
+          port_range: "{{ port_range }}"
+          address_prefix: "{{ address_prefix }}"
+       register: output
+
+
+     - debug:
+       var: output
