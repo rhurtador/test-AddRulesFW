@@ -85,7 +85,7 @@ jobs:
         echo "tenant=${{ secrets.AZURE_TENANT }}" >> ~/.azure/credentials
 
     - name: Run Ansible Playbook
-      run: ansible-playbook add_firewall_rule.yml --extra-vars "resource_group=${{ github.event.inputs.resource_group }} security_group_name=${{ github.event.inputs.security_group_name }} rule_name=${{ github.event.inputs.rule_name }} protocol=${{ github.event.inputs.protocol }} direction=${{ github.event.inputs.direction }} priority=${{ github.event.inputs.priority }} access=${{ github.event.inputs.access }} port_range=${{ github.event.inputs.port_range }} address_prefix=${{ github.event.inputs.address_prefix }}"
+      run: ansible-playbook FirewallRule/add_firewall_rule.yml --extra-vars "resource_group=${{ github.event.inputs.resource_group }} security_group_name=${{ github.event.inputs.security_group_name }} rule_name=${{ github.event.inputs.rule_name }} protocol=${{ github.event.inputs.protocol }} direction=${{ github.event.inputs.direction }} priority=${{ github.event.inputs.priority }} access=${{ github.event.inputs.access }} port_range=${{ github.event.inputs.port_range }} address_prefix=${{ github.event.inputs.address_prefix }}"
       env:
         AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
