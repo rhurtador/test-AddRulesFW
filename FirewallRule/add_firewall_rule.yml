@@ -33,4 +33,4 @@
       register: output
 
    - debug:
-        var: output
+      var: output
