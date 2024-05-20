@@ -3,7 +3,7 @@ name: Add Azure Firewall Rule
 on:
   workflow_dispatch:
     inputs:
-      branch:
+      #branch:
         #description: 'Select the branch to run the workflow on'
         #required: true
         #type: choice
