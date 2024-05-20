@@ -1,0 +1,59 @@
+name: Add Azure WAF Rule
+
+on:
+  workflow_dispatch:
+    inputs:
+      resource_group:
+        description: 'Azure Resource Group'
+        required: true
+      waf_policy_name:
+        description: 'WAF Policy Name'
+        required: true
+      rule_name:
+        description: 'Rule Name'
+        required: true
+      priority:
+        description: 'Priority'
+        required: true
+        default: '100'
+      match_conditions:
+        description: 'Match Conditions in JSON format'
+        required: true
+
+jobs:
+  add-waf-rule:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.inputs.branch }}
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install Ansible and Azure dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install ansible
+        ansible-galaxy collection install azure.azcollection
+
+    - name: Configure Azure credentials
+      run: |
+        mkdir -p ~/.azure
+        echo "[default]" > ~/.azure/credentials
+        echo "subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> ~/.azure/credentials
+        echo "client_id=${{ secrets.AZURE_CLIENT_ID }}" >> ~/.azure/credentials
+        echo "secret=${{ secrets.AZURE_SECRET }}" >> ~/.azure/credentials
+        echo "tenant=${{ secrets.AZURE_TENANT }}" >> ~/.azure/credentials
+
+    - name: Run Ansible Playbook
+      run: ansible-playbook ansible/add_waf_rule.yml --extra-vars "resource_group=${{ github.event.inputs.resource_group }} waf_policy_name=${{ github.event.inputs.waf_policy_name }} rule_name=${{ github.event.inputs.rule_name }} priority=${{ github.event.inputs.priority }} match_conditions=${{ github.event.inputs.match_conditions }}"
+      env:
+        AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+        AZURE_SECRET: ${{ secrets.AZURE_SECRET }}
+        AZURE_TENANT: ${{ secrets.AZURE_TENANT }}
