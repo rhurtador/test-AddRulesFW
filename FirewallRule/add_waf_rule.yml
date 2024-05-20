@@ -1,0 +1,28 @@
+---
+- name: Add rule to Azure WAF
+  hosts: localhost
+  connection: local
+  vars_files:
+    - azure_credentials.yml
+  tasks:
+    - name: Debug Print variables
+      debug:
+        msg:
+          - "Resource Group: {{ resource_group }}"
+          - "WAF Policy Name: {{ waf_policy_name }}"
+          - "Rule Name: {{ rule_name }}"
+          - "Priority: {{ priority }}"
+          - "Match Conditions: {{ match_conditions }}"
+
+    - name: Add rule to WAF
+      azure.azcollection.azure_rm_wafpolicy_customrule:
+        resource_group: "{{ resource_group }}"
+        policy_name: "{{ waf_policy_name }}"
+        name: "{{ rule_name }}"
+        priority: "{{ priority }}"
+        action: "Allow"
+        match_conditions: "{{ match_conditions }}"
+      register: output
+
+    - debug:
+        var: output
