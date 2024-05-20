@@ -4,13 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       branch:
-        description: 'Select the branch to run the workflow on'
-        required: true
-        type: choice
+        #description: 'Select the branch to run the workflow on'
+        #required: true
+        #type: choice
         options:
           - 'main'
           - 'develop'
-          - 'feature/xyz'
       resource_group:
         description: 'Azure Resource Group'
         required: true
