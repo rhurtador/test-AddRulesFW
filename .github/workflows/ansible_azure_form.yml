@@ -74,6 +74,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install ansible[azure]
 
+    - name: Install Azure collection for Ansible
+      run: ansible-galaxy collection install azure.azcollection
+
     - name: Configure Azure credentials
       run: |
         mkdir -p ~/.azure
