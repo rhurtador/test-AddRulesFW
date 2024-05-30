@@ -7,22 +7,21 @@
   collections:
     - azure.azcollection
   tasks:
-  - name: "Debug Print variables"
-    debug:
-      msg:
-        - "Resource Group: {{ resource_group }}"
-        - "Security Group Name: {{ security_group_name }}"
-        - "Rule Name: {{ rule_name }}"
-        - "Protocol: {{ protocol }}"
-        - "Direction: {{ direction }}"
-        - "Priority: {{ priority }}"
-        - "Access: {{ access }}"
-        - "Port Range: {{ port_range }}"
-        - "Address Prefix: {{ address_prefix }}"
+    - name: "Debug Print variables"
+      debug:
+        msg:
+          - "Resource Group: {{ resource_group }}"
+          - "Security Group Name: {{ security_group_name }}"
+          - "Rule Name: {{ rule_name }}"
+          - "Protocol: {{ protocol }}"
+          - "Direction: {{ direction }}"
+          - "Priority: {{ priority }}"
+          - "Access: {{ access }}"
+          - "Port Range: {{ port_range }}"
+          - "Address Prefix: {{ address_prefix }}"
 
-
-  - name: "Add a rule to an existing network security group"
-    azure_rm_securityrule:
+    - name: "Add a rule to an existing network security group"
+      azure.azcollection.azure_rm_securityrule:
         resource_group: "{{ resource_group }}"
         security_group_name: "{{ security_group_name }}"
         name: "{{ rule_name }}"
@@ -32,8 +31,8 @@
         access: "{{ access }}"
         port_range: "{{ port_range }}"
         address_prefix: "{{ address_prefix }}"
-    register: output
+      register: output
 
-
-- debug:
-       var: output
+    - name: "Print output"
+      debug:
+        var: output
