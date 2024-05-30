@@ -4,6 +4,8 @@
   connection: local
   vars_files:
     - azure_credentials.yml
+  collections:
+    - azure.azcollection
   tasks:
   - name: "Debug Print variables"
     debug:
